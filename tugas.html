@@ -1,0 +1,201 @@
+<!DOCTYPE html> 
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App with Customization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightblue; 
+            color: black;
+            transition: all 0.5s ease;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            position: relative;
+        }
+        .dark-mode {
+            background-color: black;
+            color: white;
+        }
+        .customize-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .todo-container {
+            width: 400px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 50px; 
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px;
+            margin: 5px 0;
+        }
+        .task-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .close {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .edit {
+            background-color: rgb(135, 193, 235);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .close:hover {
+            background-color: darkred;
+        }
+        .edit:hover {
+            background-color: rgb(194, 159, 54);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="customize-container">
+        <h2>Customize Page</h2>
+        <label for="background-color">Background Color:</label>
+        <select id="background-color">
+            <option value="white">White</option>
+            <option value="lightgray">Light Gray</option>
+            <option value="lightblue">Light Blue</option>
+            <option value="lightgreen">Light Green</option>
+            <option value="pink">Pink</option>
+            <option value="gold">Gold</option>
+        </select>
+
+        <label for="font-size">Font Size:</label>
+        <input type="range" id="font-size" min="12" max="40" value="16">
+        
+        <button id="dark-mode-toggle">Dark Mode</button>
+
+        <label for="font-style">Font Style:</label>
+        <select id="font-style">
+            <option value="Arial, sans-serif">Sans-Serif (Arial)</option>
+            <option value="Times New Roman, serif">Serif (Times New Roman)</option>
+        </select>
+    </div>
+
+    <div class="todo-container">
+        <h2>My To-Do List</h2>
+        <input type="text" id="newTask" placeholder="Add a new task...">
+        <button id="addButton" style="background-color: green; color: white;">Add</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="taskList">
+                
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const addButton = document.getElementById('addButton');
+        const taskList = document.getElementById('taskList');
+        const taskInput = document.getElementById('newTask');
+
+        addButton.addEventListener('click', addTask);
+
+        function addTask() {
+            const taskInputValue = taskInput.value.trim(); 
+
+            if (taskInputValue === '') {
+                alert('Please enter a task.');
+                return;
+            }
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${taskInputValue}</td>
+                <td class="task-buttons">
+                    <button class="edit" onclick="editTask(this)">Edit</button>
+                    <button class="close" onclick="deleteTask(this)">Delete</button>
+                </td>
+            `;
+
+            taskList.appendChild(tr);
+
+            taskInput.value = '';
+        }
+
+        function deleteTask(element) {
+            const tr = element.parentElement.parentElement;
+            tr.remove();
+        }
+
+        function editTask(element) {
+            const taskTd = element.parentElement.previousElementSibling;
+            const newTask = prompt('Edit your task:', taskTd.textContent);
+
+            if (newTask !== null && newTask.trim() !== '') {
+                taskTd.textContent = newTask;
+            }
+        }
+
+        document.getElementById('background-color').addEventListener('change', function() {
+            document.body.style.backgroundColor = this.value;
+        });
+
+        document.getElementById('font-size').addEventListener('input', function() {
+            document.body.style.fontSize = this.value + 'px';
+        });
+
+        document.getElementById('dark-mode-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        document.getElementById('font-style').addEventListener('change', function() {
+            document.body.style.fontFamily = this.value;
+        });
+    </script>
+
+</body>
+</html>
